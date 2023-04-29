@@ -40,6 +40,16 @@ To improve your connection between your 3DS and PC, I recommend the following:
 - Set the Wi-Fi network to use the 2.4GHz frequency band, as this is the frequency that the 3DS supports.
 - If you need to change your 3DS's Wi-Fi connection, you can do so by pressing L + Down + Select to open the Rosalina menu, then navigating to System Configuration > Control Wireless Connection.
 
+## Acknowledgements
+
+The following tools were used in the creation of LeapSync:
+
+- devkitPro: A cross-platform development environment for creating homebrew applications, used for the development of LeapSync.
+- makerom: Used to create the .cia file for LeapSync.
+- ba-GUI-nnertool: Used to create the banner and icon files for LeapSync.
+
+A special thanks to the developers of these tools for their contribution to the 3DS homebrew community.
+
 ## License
 
 LeapSync is licensed under the MIT License. See [LICENSE](LICENSE) for details.
