@@ -3,7 +3,7 @@
         {
             "name": "3DS",
             "includePath": [
-                // "${workspaceFolder}/include/**",
+                "${workspaceFolder}/include/**",
                 "C:\\devkitPro\\devkitARM\\arm-none-eabi\\include\\**",
                 "C:\\devkitPro\\devkitARM\\lib\\gcc\\arm-none-eabi\\**",
                 "C:\\devkitPro\\libctru\\include\\**",
@@ -43,7 +43,7 @@
                 "-Wno-unused-but-set-variable",
                 "-Wno-attributes"
             ],
-            "configurationProvider": "ms-vscode.makefile-tools"
+            "configurationProvider": "ms-vscode.cpptools"
         }
     ],
     "version": 4

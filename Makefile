@@ -42,9 +42,10 @@ GFXBUILD	:=	$(BUILD)
 #ROMFS		:=	romfs
 #GFXBUILD	:=	$(ROMFS)/gfx
 
-APP_TITLE 		:= $(TARGET)
+APP_TITLE 		:= LeapSync
 APP_DESCRIPTION := 3DS to PC controller
 APP_AUTHOR 		:= SmokedFish
+ICON			:= resources/icon.png
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------

@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "*.bak": "c",
+        "select.h": "c",
+        "errno.h": "c",
+        "types.h": "c",
+        "socket.h": "c",
+        "inet.h": "c",
+        "stdarg.h": "c",
+        "stdlib.h": "c"
+    }
+}

@@ -1,6 +1,6 @@
 // LeapSync - modified by Jacob Espy (c) 2023 Jacob Espy. See LICENSE for more details.
-// Original code copyrighted (c) 2021 Funkenstein Software Consulting.
-// This software is licensed under the MIT License.
+// Original code by Funkenstein Software Consulting (c) 2021. 
+// This file is licensed under the BSD-3-Clause License. 
 #pragma once
 
 #include <stdint.h>
