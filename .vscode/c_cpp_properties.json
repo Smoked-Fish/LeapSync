@@ -1,0 +1,50 @@
+{
+    "configurations": [
+        {
+            "name": "3DS",
+            "includePath": [
+                // "${workspaceFolder}/include/**",
+                "C:\\devkitPro\\devkitARM\\arm-none-eabi\\include\\**",
+                "C:\\devkitPro\\devkitARM\\lib\\gcc\\arm-none-eabi\\**",
+                "C:\\devkitPro\\libctru\\include\\**",
+                "C:\\devkitPro\\portlibs\\3ds\\bin\\**"
+            ],
+            "defines": [
+                "ARM11",
+                "LITTLE_ENDIAN",
+                "_3DS",
+                "LIBC_HAS_ASSERT",
+                "LIBC_HAS_EXIT",
+                "LIBC_HAS_MATHLIB",
+                "LIBC_HAS_STDIO",
+                "LIBC_HAS_STDLIB",
+                "LIBC_HAS_STRING",
+                "LIBC_HAS_TIME",
+                "UNICODE",
+                "_CRT_SECURE_NO_WARNINGS"
+            ],
+            "compilerPath": "C:\\devkitPro\\devkitARM\\bin\\arm-none-eabi-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "gcc-arm",
+            "compilerArgs": [
+                "-march=armv6k",
+                "-mtune=mpcore",
+                "-mfloat-abi=hard",
+                "-mfpu=vfp",
+                "-Wall",
+                "-Wextra",
+                "-Wno-missing-field-initializers",
+                "-Wno-unused-parameter",
+                "-Wno-unused-variable",
+                "-Wno-unused-function",
+                "-Wno-sign-compare",
+                "-Wno-strict-aliasing",
+                "-Wno-unused-but-set-variable",
+                "-Wno-attributes"
+            ],
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
