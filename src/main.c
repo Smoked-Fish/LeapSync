@@ -36,17 +36,24 @@ int main(int argc, char **argv)
 	printf("\x1b[1;1HHold Start and Down and press R to exit.");
 	printf("\x1b[2;1HCirclePad position:");
 	printf("\x1b[4;1HC-Stick position:");
-	printf("\x1b[6;1HGyro data:");
+	printf("\x1b[6;1HTouch data:");
+	printf("\x1b[8;1HGyro data:");
+	printf("\x1b[10;1HAccel data:");
+	printf("\x1b[12;1H");
 
 	circlePosition prevCirclePos = {0, 0};
 	circlePosition prevCStickPos = {0, 0};
+	touchPosition  prevTouchPos  = {0, 0};
 	angularRate	   prevGyroPos   = {0, 0, 0};
+	accelVector    prevAccelPos  = {0, 0, 0};
+
+	HIDUSER_EnableAccelerometer();
 
 	while (aptMainLoop())
 	{
 		hidScanInput();
 
-		process_input(sock, &kDownOld, &kHeldOld, &kUpOld, &prevCirclePos, &prevCStickPos, &prevGyroPos);
+		process_input(sock, &kDownOld, &kHeldOld, &kUpOld, &prevCirclePos, &prevCStickPos, &prevTouchPos, &prevGyroPos, &prevAccelPos);
 
 		if ((kHeldOld & KEY_START) && (kHeldOld & KEY_DDOWN) && (kDownOld & KEY_R)) {
 			break;

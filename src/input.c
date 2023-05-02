@@ -32,10 +32,6 @@ uint8_t keysHex[24] = {
     0x11, 0x00, 0x00, 0x00
 };
 
-circlePosition prevCirclePos = {0, 0};
-circlePosition prevCStickPos = {0, 0};
-angularRate	   prevGyroPos   = {0, 0, 0};
-
 void send_button_state(int sock, uint8_t key_hex, bool state) {
 	// Allocate space for the extra character with + 1
     slip_encode_message_t* msg = slip_encode_message_create(2);  
@@ -86,13 +82,13 @@ void send_circle_position(int sock, int dx, int dy, bool cPad) {
     slip_encode_message_destroy(msg);
 }
 
-void send_gyro_data(int sock, int gx, int gy, int gz) {
-    slip_encode_message_t* msg = slip_encode_message_create(18);
+void send_touch_position(int sock, int px, int py) {
+    slip_encode_message_t* msg = slip_encode_message_create(11);
     slip_encode_begin(msg);
 
     // Encode the position as a string
-    char pos_str[17];
-    snprintf(pos_str, 17, "(%04d,%04d,%04d)", gx, gy, gz);
+    char pos_str[10];
+    snprintf(pos_str, 10, "(%03d,%03d)", px, py);
 
     // Encode the position string
     int len = strlen(pos_str);
@@ -101,18 +97,49 @@ void send_gyro_data(int sock, int gx, int gy, int gz) {
         slip_encode_byte(msg, pos_str[i]);
     }
 
-	slip_encode_byte(msg, SLIP_GYRO);
+    slip_encode_byte(msg, SLIP_TOUCH);
+    slip_encode_finish(msg);
 
+    // Send the message
+    send(sock, msg->encoded, msg->index, 0);
+    slip_encode_message_destroy(msg);
+}
+
+void send_motion_data(int sock, int x, int y, int z, bool gyro) {
+    int msg_size = gyro ? 21 : 18;
+    slip_encode_message_t* msg = slip_encode_message_create(msg_size);
+    slip_encode_begin(msg);
+
+    // Encode the position as a string
+    char pos_str[msg_size-1];
+	if (gyro) {
+        snprintf(pos_str, msg_size-1, "(%05d,%05d,%05d)", x, y, z);
+    } else {
+        snprintf(pos_str, msg_size-1, "(%04d,%04d,%04d)", x, y, z);
+    }
+
+    // Encode the position string
+    int len = strlen(pos_str);
+    int i;
+    for (i = 0; i < len; i++) {
+        slip_encode_byte(msg, pos_str[i]);
+    }
+
+	if (gyro) {
+        slip_encode_byte(msg, SLIP_GYRO);
+    } else {
+
+        slip_encode_byte(msg, SLIP_ACCEL);
+    }
 
     slip_encode_finish(msg);
 
     // Send the message
     send(sock, msg->encoded, msg->index, 0);
-
     slip_encode_message_destroy(msg);
 }
 
-void process_input(int sock, u32 *kDownOld, u32 *kHeldOld, u32 *kUpOld, circlePosition *prevCirclePos, circlePosition *prevCStickPos, angularRate *prevGyroPos) {
+void process_input(int sock, u32 *kDownOld, u32 *kHeldOld, u32 *kUpOld, circlePosition *prevCirclePos, circlePosition *prevCStickPos, touchPosition *prevTouchPos, angularRate *prevGyroPos, accelVector *prevAccelPos) {
     u32 kDown = hidKeysDown();
     u32 kHeld = hidKeysHeld();
     u32 kUp = hidKeysUp();
@@ -123,8 +150,10 @@ void process_input(int sock, u32 *kDownOld, u32 *kHeldOld, u32 *kUpOld, circlePo
         printf("\x1b[1;1HHold Start and Down and press R to exit.");
         printf("\x1b[2;1HCirclePad position:");
         printf("\x1b[4;1HC-Stick position:");
-        printf("\x1b[6;1HGyro data:");
-        printf("\x1b[8;1H");
+        printf("\x1b[6;1HTouch data:");
+        printf("\x1b[8;1HGyro data:");
+        printf("\x1b[10;1HAccel data:");
+        printf("\x1b[12;1H");
 
         // Check for pressed keys and send them to the server
         int i;
@@ -147,36 +176,54 @@ void process_input(int sock, u32 *kDownOld, u32 *kHeldOld, u32 *kUpOld, circlePo
         }
     }
 
+
     *kDownOld = kDown;
     *kHeldOld = kHeld;
     *kUpOld = kUp;
 
     circlePosition circlePos;
+    circlePosition cstickPos;
+    touchPosition touchPos;
+    angularRate gyroPos;
+    accelVector accelPos;
+
     hidCircleRead(&circlePos);
+    hidCstickRead(&cstickPos);
+    hidTouchRead(&touchPos);
+    hidGyroRead(&gyroPos);
+    hidAccelRead(&accelPos);
+
     printf("\x1b[3;1H%04d; %04d", circlePos.dx, circlePos.dy);
+    printf("\x1b[5;1H%04d; %04d", cstickPos.dx, cstickPos.dy);
+    printf("\x1b[7;1H%03d; %03d", touchPos.px, touchPos.py);
+    printf("\x1b[9;1H%05d, %05d, %05d", gyroPos.z,  gyroPos.y, gyroPos.z);
+    printf("\x1b[11;1H%04d, %04d, %04d", accelPos.x, accelPos.y, accelPos.z);
+
 
     if (circlePos.dx != prevCirclePos->dx || circlePos.dy != prevCirclePos->dy) {
         send_circle_position(sock, circlePos.dx, circlePos.dy, true);
     }
 
-    *prevCirclePos = circlePos;
-
-    circlePosition cstickPos;
-    hidCstickRead(&cstickPos);
-    printf("\x1b[5;1H%04d; %04d", cstickPos.dx, cstickPos.dy);
-
     if (cstickPos.dx != prevCStickPos->dx || cstickPos.dy != prevCStickPos->dy) {
         send_circle_position(sock, cstickPos.dx, cstickPos.dy, false);
     }
 
-    *prevCStickPos = cstickPos;
-
-    angularRate gyroPos;
-    hidGyroRead(&gyroPos);
-    printf("\x1b[7;1H%04d, %04d, %04d", gyroPos.x, gyroPos.y, gyroPos.z);
-    if (gyroPos.x != prevGyroPos->x || gyroPos.y != prevGyroPos->y || gyroPos.z != prevGyroPos->z) {
-        send_gyro_data(sock, gyroPos.x, gyroPos.y, gyroPos.z);
+    if (touchPos.px != prevTouchPos->px || touchPos.py != prevTouchPos->py) {
+        send_touch_position(sock, touchPos.px, touchPos.py);
     }
 
+    if (gyroPos.x != prevGyroPos->x || gyroPos.y != prevGyroPos->y || gyroPos.z != prevGyroPos->z) {
+        send_motion_data(sock, gyroPos.x, gyroPos.y, gyroPos.z, true);
+    }
+
+    if (accelPos.x != prevAccelPos->x || accelPos.y != prevAccelPos->y || accelPos.z != prevAccelPos->z) {
+        send_motion_data(sock, accelPos.x, accelPos.y, accelPos.z, false);
+    }
+
+
+    *prevCirclePos = circlePos;
+    *prevCStickPos = cstickPos;
+    *prevTouchPos = touchPos;
     *prevGyroPos = gyroPos;
+    *prevAccelPos = accelPos;
 }

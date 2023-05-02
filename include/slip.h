@@ -32,9 +32,15 @@ extern "C" {
 #define SLIP_CSTICK ((uint8_t)(0xC4))
 
 //---------------------------------------------------------------------------
-// Binary constants for Gyroscope angular rate
+// Binary constants for the touch position
 //---------------------------------------------------------------------------
-#define SLIP_GYRO ((uint8_t)(0xC5))
+#define SLIP_TOUCH ((uint8_t)(0xC5))
+
+//---------------------------------------------------------------------------
+// Binary constants for Gyroscope angular rate and the Accelerometer vector.
+//---------------------------------------------------------------------------
+#define SLIP_GYRO  ((uint8_t)(0xC6))
+#define SLIP_ACCEL ((uint8_t)(0xC7))
 
 //---------------------------------------------------------------------------
 // Return values for encoding operations
