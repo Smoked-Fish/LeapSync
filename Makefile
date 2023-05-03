@@ -197,9 +197,9 @@ clean:
 #---------------------------------------------------------------------------------
 cia:
 	@echo Creating CIA...
-	@.\tools\makerom.exe -o build\LeapSync.cxi -rsf resources\LeapSync.rsf -target t -elf bin\LeapSync.elf -icon resources\icon.icn -banner resources\banner.bnr -desc app:4
-	@.\tools\makerom.exe -o build\LeapSync.cfa -rsf resources\LeapSync.rsf -target t
-	@.\tools\makerom.exe -f cia -o bin\LeapSync.cia -target t -i build\LeapSync.cxi:0:0 -i build\LeapSync.cfa:1:1 -major 0 -minor 9 -micro 0
+	@./tools/makerom.exe -o build/LeapSync.cxi -rsf resources/LeapSync.rsf -target t -elf bin/LeapSync.elf -icon resources/icon.icn -banner resources/banner.bnr -desc app:4
+	@./tools/makerom.exe -o build/LeapSync.cfa -rsf resources/LeapSync.rsf -target t
+	@./tools/makerom.exe -f cia -o bin/LeapSync.cia -target t -i build/LeapSync.cxi:0:0 -i build/LeapSync.cfa:1:1 -major 0 -minor 9 -micro 0
 	@echo CIA created successfully.
 
 #---------------------------------------------------------------------------------
