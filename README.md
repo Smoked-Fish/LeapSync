@@ -1,6 +1,6 @@
 # LeapSync
 
-LeapSync is a 3DS homebrew application that lets you use your 3DS as a controller for games on your PC. With LeapSync, you can transmit data from your 3DS's buttons, joysticks and gyroscope to your PC, allowing you to play games using your 3DS as a controller.
+LeapSync is a 3DS homebrew application that lets you use your 3DS as a controller for games on your PC. With LeapSync, you can transmit data from your 3DS's buttons, joysticks, touchscreen, gyroscope and accelerometer to your PC, allowing you to play games using your 3DS as a controller.
 
 ## Requirements
 
